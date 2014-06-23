@@ -3,6 +3,9 @@
 # Linux/arm 3.0.15 Kernel Configuration
 #
 ### WIDzard ###
+#GPU Voltage Control
+
+CONFIG_GPU_CLOCK_CONTROL=y
 #Optimize O3
 CONFIG_CC_OPTIMIZE_FOR_SPEED=y
 #ABB Control
