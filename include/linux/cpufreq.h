@@ -363,6 +363,9 @@ extern struct cpufreq_governor cpufreq_gov_powersave;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE)
 extern struct cpufreq_governor cpufreq_gov_userspace;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_userspace)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_HOTPLUG)
+extern struct cpufreq_governor cpufreq_gov_hotplug;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_hotplug)
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND)
 extern struct cpufreq_governor cpufreq_gov_ondemand;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_ondemand)
@@ -372,12 +375,21 @@ extern struct cpufreq_governor cpufreq_gov_conservative;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_INTERACTIVE)
 extern struct cpufreq_governor cpufreq_gov_interactive;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_interactive)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE)
+extern struct cpufreq_governor cpufreq_gov_conservative;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_conservative)
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_ADAPTIVE)
 extern struct cpufreq_governor cpufreq_gov_adaptive;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_adaptive)
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_PEGASUSQ)
 extern struct cpufreq_governor cpufreq_gov_pegasusq;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_pegasusq)
+#elif defined(CONFIG_CPU_FREQ_GOV_LULZACTIVEQ)
+extern struct cpufreq_governor cpufreq_gov_lulzactiveq;
+#define CPUFREQ_DEFAULT_GOVERNOR (&cpufreq_gov_lulzactiveq)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_YANKASUSQ)
+extern struct cpufreq_governor cpufreq_gov_yankasusq;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_yankasusq)
 #endif
 
 
@@ -421,3 +433,6 @@ void cpufreq_frequency_table_put_attr(unsigned int cpu);
 
 
 #endif /* _LINUX_CPUFREQ_H */
+#define SCALING_MAX_COUPLED 1
+#define SCALING_MAX_UNDEFINED 0
+#define SCALING_MAX_UNCOUPLED -1
