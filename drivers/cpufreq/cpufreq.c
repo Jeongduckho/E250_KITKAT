@@ -606,9 +606,87 @@ static ssize_t show_scaling_setspeed(struct cpufreq_policy *policy, char *buf)
 	return policy->governor->show_setspeed(policy, buf);
 }
 
+extern ssize_t store_UV_mV_table(struct cpufreq_policy *policy,
+				 const char *buf, size_t count);
+
+extern ssize_t store_UV_uV_table(struct cpufreq_policy *policy,
+				 const char *buf, size_t count);
+
+extern ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf);
+
+extern ssize_t show_UV_uV_table(struct cpufreq_policy *policy, char *buf);
+
+/* sysfs interface for ASV level */
+extern ssize_t show_asv_level(struct cpufreq_policy *policy, char *buf);
+extern ssize_t store_asv_level(struct cpufreq_policy *policy,
+                                      const char *buf, size_t count);
+
 /**
  * show_scaling_driver - show the current cpufreq HW/BIOS limitation
  */
+extern ssize_t acpuclk_get_vdd_levels_str(char *buf);
+ static ssize_t show_vdd_levels(struct cpufreq_policy *policy, char *buf)
+ {
+ return acpuclk_get_vdd_levels_str(buf);
+ }
+ 
+ extern void acpuclk_set_vdd(unsigned acpu_khz, int vdd);
+ static ssize_t store_vdd_levels(struct cpufreq_policy *policy, const char *buf, size_t count)
+ {
+ int i = 0, j;
+ int pair[2] = { 0, 0 };
+ int sign = 0;
+ 
+ if (count < 1)
+ return 0;
+ 
+ if (buf[0] == '-')
+ {
+ sign = -1;
+ i++;
+ }
+ else if (buf[0] == '+')
+ {
+ sign = 1;
+ i++;
+ }
+ 
+ for (j = 0; i < count; i++)
+ {
+ char c = buf[i];
+ if ((c >= '0') && (c <= '9'))
+ {
+ pair[j] *= 10;
+ pair[j] += (c - '0');
+ }
+ else if ((c == ' ') || (c == '\t'))
+ {
+ if (pair[j] != 0)
+ {
+ j++;
+ if ((sign != 0) || (j > 1))
+ break;
+ }
+ }
+ else
+ break;
+ }
+ 
+ if (sign != 0)
+ {
+ if (pair[0] > 0)
+ acpuclk_set_vdd(0, sign * pair[0]);
+ }
+ else
+ {
+ if ((pair[0] > 0) && (pair[1] > 0))
+ acpuclk_set_vdd((unsigned)pair[0], pair[1]);
+ else
+ return -EINVAL;
+ }
+ 
+return count;
+}
 static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
 {
 	unsigned int limit;
@@ -620,12 +698,16 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
 	}
 	return sprintf(buf, "%u\n", policy->cpuinfo.max_freq);
 }
+extern ssize_t show_smooth_level(struct cpufreq_policy *policy, char *buf);
+extern ssize_t store_smooth_level(struct cpufreq_policy *policy,
+  									const char *buf, size_t count);
 
 cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
 cpufreq_freq_attr_ro(cpuinfo_min_freq);
 cpufreq_freq_attr_ro(cpuinfo_max_freq);
 cpufreq_freq_attr_ro(cpuinfo_transition_latency);
 cpufreq_freq_attr_ro(scaling_available_governors);
+cpufreq_freq_attr_ro(available_freqs);
 cpufreq_freq_attr_ro(scaling_driver);
 cpufreq_freq_attr_ro(scaling_cur_freq);
 cpufreq_freq_attr_ro(bios_limit);
@@ -635,6 +717,10 @@ cpufreq_freq_attr_rw(scaling_min_freq);
 cpufreq_freq_attr_rw(scaling_max_freq);
 cpufreq_freq_attr_rw(scaling_governor);
 cpufreq_freq_attr_rw(scaling_setspeed);
+cpufreq_freq_attr_rw(UV_mV_table);
+cpufreq_freq_attr_rw(UV_uV_table);
+/* ASV level */
+cpufreq_freq_attr_rw(asv_level);
 
 static struct attribute *default_attrs[] = {
 	&cpuinfo_min_freq.attr,
@@ -647,7 +733,11 @@ static struct attribute *default_attrs[] = {
 	&scaling_governor.attr,
 	&scaling_driver.attr,
 	&scaling_available_governors.attr,
+	&cpufreq_freq_attr_scaling_available_freqs.attr,
 	&scaling_setspeed.attr,
+	&UV_mV_table.attr,
+	&UV_uV_table.attr,
+	&asv_level.attr,
 	NULL
 };
 
@@ -777,6 +867,8 @@ static int cpufreq_add_dev_policy(unsigned int cpu,
 
 			spin_lock_irqsave(&cpufreq_driver_lock, flags);
 			cpumask_copy(managed_policy->cpus, policy->cpus);
+			cpumask_and(managed_policy->cpus,
+				managed_policy->cpus, cpu_online_mask);
 			per_cpu(cpufreq_cpu_data, cpu) = managed_policy;
 			spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
 
@@ -1827,6 +1919,9 @@ static struct notifier_block __refdata cpufreq_cpu_notifier = {
     .notifier_call = cpufreq_cpu_callback,
 };
 
+#if defined(CONFIG_CPU_UNDERVOLTING)
+void create_standard_UV_interfaces(void);
+#endif
 /*********************************************************************
  *               REGISTER / UNREGISTER CPUFREQ DRIVER                *
  *********************************************************************/
@@ -1889,7 +1984,9 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
 
 	register_hotcpu_notifier(&cpufreq_cpu_notifier);
 	pr_debug("driver %s up and running\n", driver_data->name);
-
+#if defined(CONFIG_CPU_UNDERVOLTING)
+	create_standard_UV_interfaces();
+#endif
 	return 0;
 err_sysdev_unreg:
 	sysdev_driver_unregister(&cpu_sysdev_class,
