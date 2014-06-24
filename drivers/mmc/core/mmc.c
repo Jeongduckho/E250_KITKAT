@@ -552,13 +552,13 @@ static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
 		ext_csd[EXT_CSD_SEC_FEATURE_SUPPORT];
 	card->ext_csd.raw_trim_mult =
 		ext_csd[EXT_CSD_TRIM_MULT];
-	card->ext_csd.raw_partition_support = ext_csd[EXT_CSD_PARTITION_SUPPORT];
 	if (card->ext_csd.rev >= 4) {
 		/*
 		 * Enhanced area feature support -- check whether the eMMC
 		 * card has the Enhanced area enabled.  If so, export enhanced
 		 * area offset and size to user by adding sysfs interface.
 		 */
+		card->ext_csd.raw_partition_support = ext_csd[EXT_CSD_PARTITION_SUPPORT];
 		if ((ext_csd[EXT_CSD_PARTITION_SUPPORT] & 0x2) &&
 		    (ext_csd[EXT_CSD_PARTITION_ATTRIBUTE] & 0x1)) {
 			u8 hc_erase_grp_sz =
@@ -1194,21 +1194,8 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	}
 
 	/*
-
-
-	
 	 * Ensure eMMC boot config is protected.
 	 */
-	if (!(card->ext_csd.boot_part_prot & (0x1<<4)) &&
-		!(card->ext_csd.boot_part_prot & (0x1<<0))) {
-		card->ext_csd.boot_part_prot |= (0x1<<0);
-		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
-				 EXT_CSD_BOOT_CONFIG_PROT,
-				 card->ext_csd.boot_part_prot,
-				 card->ext_csd.part_time);
-		if (err && err != -EBADMSG)
-			goto free_card;
-	}
 
 	/*
 	 * If the host supports the power_off_notify capability then
