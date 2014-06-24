@@ -2,21 +2,35 @@
 # Automatically generated make config: don't edit
 # Linux/arm 3.0.15 Kernel Configuration
 #
-### WIDzard ###
+##############################################
+#        WIDZARD KERNEL CUSTOMIZE LIST       #
+##############################################
 #GPU Voltage Control
-
 CONFIG_GPU_CLOCK_CONTROL=y
+
 #Optimize O3
 CONFIG_CC_OPTIMIZE_FOR_SPEED=y
+
 #ABB Control
 CONFIG_ABB_CONTROL=y
+
 #CPU OVERCLOCK
 CONFIG_DVFS_LIMIT=y
 CONFIG_CPU_UNDERVOLTING=y
 CONFIG_SPLIT_PTLOCK_CPUS=4
-#MDNIE
-CONFIG_FB_S5P_MDNIE_HIJACK=y
-### WIDzard ###
+
+##############################################
+#        Pre-Samsung Config Setting          #
+##############################################
+
+CONFIG_MACH_T0_KOR_SKT=y
+CONFIG_WLAN_REGION_CODE=201
+CONFIG_USER_RESET_DEBUG=y
+CONFIG_SEC_OOM_KILLER=y
+CONFIG_USBIRQ_BALANCING_LTE_HIGHTP=y
+CONFIG_JACK_FET=y
+
+##############################################
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -1417,7 +1431,6 @@ CONFIG_BCM4334=m
 # CONFIG_BCM43241 is not set
 CONFIG_BROADCOM_WIFI_RESERVED_MEM=y
 # CONFIG_WLAN_COUNTRY_CODE is not set
-# CONFIG_WLAN_REGION_CODE is not set
 # CONFIG_HOSTAP is not set
 # CONFIG_IWM is not set
 # CONFIG_LIBERTAS is not set
@@ -3392,12 +3405,3 @@ CONFIG_TIMA_LOG=y
 # CONFIG_SEC_RESTRICT_FORK is not set
 # CONFIG_SEC_RESTRICT_ROOTING_LOG is not set
 
-##############################################
-# Pre-Samsung Config Setting
-CONFIG_MACH_T0_KOR_SKT=y
-CONFIG_WLAN_REGION_CODE=201
-CONFIG_USER_RESET_DEBUG=y
-CONFIG_SEC_OOM_KILLER=y
-CONFIG_USBIRQ_BALANCING_LTE_HIGHTP=y
-CONFIG_JACK_FET=y
-##############################################
