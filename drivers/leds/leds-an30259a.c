@@ -24,7 +24,7 @@
 #include <linux/leds-an30259a.h>
 #include <linux/workqueue.h>
 #include <linux/wakelock.h>
-
+  
 /* AN30259A register map */
 #define AN30259A_REG_SRESET		0x00
 #define AN30259A_REG_LEDON		0x01
