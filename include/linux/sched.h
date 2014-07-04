@@ -1,7 +1,7 @@
 #ifndef _LINUX_SCHED_H
 #define _LINUX_SCHED_H
-
-/*
+   
+/*   
  * cloning flags:
  */
 #define CSIGNAL		0x000000ff	/* signal mask to be sent at exit */
