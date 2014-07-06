@@ -85,7 +85,6 @@ struct cpu_dbs_info_s {
 	cputime64_t prev_cpu_idle;
 	cputime64_t prev_cpu_iowait;
 	cputime64_t prev_cpu_wall;
-	unsigned int prev_cpu_wall_delta;
 	cputime64_t prev_cpu_nice;
 	struct cpufreq_policy *cur_policy;
 	struct delayed_work work;
@@ -609,9 +608,6 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 		unsigned int idle_time, wall_time, iowait_time;
 		unsigned int load, load_freq;
 		int freq_avg;
-		bool deep_sleep_detected = false;
-		const unsigned int deep_sleep_backoff = 10;
-		const unsigned int deep_sleep_factor = 5;
 
 		j_dbs_info = &per_cpu(od_cpu_dbs_info, j);
 
@@ -638,14 +634,6 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 		 * to high load. As opposed we'll decay slower
 		 * towards low load and long idle times.
 		 */
-		if (j_dbs_info->prev_cpu_wall_delta >
-		    wall_time * deep_sleep_factor ||
-		    j_dbs_info->prev_cpu_wall_delta * deep_sleep_factor <
-		    wall_time)
-			deep_sleep_detected = true;
-		j_dbs_info->prev_cpu_wall_delta =
-			(j_dbs_info->prev_cpu_wall_delta * deep_sleep_backoff
-			 + wall_time) / (deep_sleep_backoff+1);
 
 		idle_time = (unsigned int) cputime64_sub(cur_idle_time,
 				j_dbs_info->prev_cpu_idle);
@@ -671,9 +659,6 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 			j_dbs_info->prev_cpu_nice = kstat_cpu(j).cpustat.nice;
 			idle_time += jiffies_to_usecs(cur_nice_jiffies);
 		}
-
-		if (deep_sleep_detected)
-			continue;
 
 		/*
 		 * For the purpose of ondemand, waiting for disk IO is an

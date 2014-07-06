@@ -169,6 +169,19 @@
  *
  * use 0 as page_align if page_aligned data is not used */
 /*
+ *  arch/arm/include/asm/cache.h
+ */
+/*
+ * Memory returned by kmalloc() may be used for DMA, so we must make
+ * sure that all such allocations are cache aligned. Otherwise,
+ * unrelated code may cause parts of the buffer to be read into the
+ * cache before the transfer is done, causing old data to be seen by
+ * the CPU.
+ */
+/*
+ * With EABI on ARMv5 and above we must have 64-bit aligned slab pointers.
+ */
+/*
  *  arch/arm/include/asm/thread_info.h
  *
  *  Copyright (C) 2002 Russell King.
@@ -430,7 +443,7 @@ SECTIONS
   *(.init.data) *(.meminit.data) *(.init.rodata) . = ALIGN(8); __start_ftrace_events = .; *(_ftrace_events) __stop_ftrace_events = .; *(.meminit.rodata) . = ALIGN(32); __dtb_start = .; *(.dtb.init.rodata) __dtb_end = .;
  
  }
- . = ALIGN((1 << 12)); .data..percpu : AT(ADDR(.data..percpu) - 0) { __per_cpu_load = .; __per_cpu_start = .; *(.data..percpu..first) . = ALIGN((1 << 12)); *(.data..percpu..page_aligned) . = ALIGN(32); *(.data..percpu..readmostly) . = ALIGN(32); *(.data..percpu) *(.data..percpu..shared_aligned) __per_cpu_end = .; }
+ . = ALIGN((1 << 12)); .data..percpu : AT(ADDR(.data..percpu) - 0) { __per_cpu_load = .; __per_cpu_start = .; *(.data..percpu..first) . = ALIGN((1 << 12)); *(.data..percpu..page_aligned) . = ALIGN((1 << 6)); *(.data..percpu..readmostly) . = ALIGN((1 << 6)); *(.data..percpu) *(.data..percpu..shared_aligned) __per_cpu_end = .; }
  . = ALIGN((1 << 12));
  __init_end = .;
  /*
@@ -476,12 +489,12 @@ SECTIONS
 		 */
   . = ALIGN(8192); *(.data..init_task)
   . = ALIGN((1 << 12)); __nosave_begin = .; *(.data..nosave) . = ALIGN((1 << 12)); __nosave_end = .;
-  . = ALIGN(32); *(.data..cacheline_aligned)
-  . = ALIGN(32); *(.data..read_mostly) . = ALIGN(32);
+  . = ALIGN((1 << 6)); *(.data..cacheline_aligned)
+  . = ALIGN((1 << 6)); *(.data..read_mostly) . = ALIGN((1 << 6));
   /*
 		 * The exception fixup table (might need resorting at runtime)
 		 */
-  . = ALIGN(32);
+  . = ALIGN(4);
   __start___ex_table = .;
   *(__ex_table)
   __stop___ex_table = .;

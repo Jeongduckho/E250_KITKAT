@@ -2,6 +2,8 @@
  *
  * Written by David Howells (dhowells@redhat.com).
  * Derived from arch/i386/kernel/semaphore.c
+ *
+ * Steal writing sem. Alex Shi <alex.shi@intel.com>
  */
 #include <linux/rwsem.h>
 #include <linux/sched.h>

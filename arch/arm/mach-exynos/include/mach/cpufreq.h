@@ -14,7 +14,7 @@
  * This should be same with cpufreq_frequency_table
 */
 
-#define CPU_UV_MV_MAX 2000000
+#define CPU_UV_MV_MAX 1800000
 #define CPU_UV_MV_MIN 600000
 enum cpufreq_level_index {
 	L0, L1, L2, L3, L4,

@@ -25,7 +25,7 @@
 #define CPUFREQ_NAME_LEN 16
 
 #if defined(CONFIG_CPU_EXYNOS4212) || defined(CONFIG_CPU_EXYNOS4412)
-#define CPUFREQ_LEVEL_END	(L19 + 1)
+#define CPUFREQ_LEVEL_END	(L18 + 1)
 #endif
 
 /*********************************************************************
@@ -396,6 +396,9 @@ extern struct cpufreq_governor cpufreq_gov_lulzactiveq;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_YANKASUSQ)
 extern struct cpufreq_governor cpufreq_gov_yankasusq;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_yankasusq)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_INTELLIACTIVE)
+extern struct cpufreq_governor cpufreq_gov_intelliactive;
+#define CPUFREQ_DEFAULT_GOVERNOR    (&cpufreq_gov_intelliactive)
 #endif
 
 

@@ -349,7 +349,7 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
 CFLAGS_MODULE   =
 AFLAGS_MODULE   =
-LDFLAGS_MODULE  = --strip-debug
+LDFLAGS_MODULE  =
 CFLAGS_KERNEL	=
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
@@ -377,12 +377,8 @@ KBUILD_CFLAGS   := -Wundef                                \
 		   -ffast-math                            \
 		   -march=armv7-a \
 		   -mtune=cortex-a9 -mfpu=neon -munaligned-access \
-		   -ffast-math -D__ANDROID__ -s -pipe -Ofast -funsafe-math-optimizations -mvectorize-with-neon-quad \
-		   -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize  \
-		   -fno-tree-slp-vectorize -fno-defer-pop -fmerge-constants -fmerge-all-constants -fgcse-after-reload \
-	   	   -funsafe-loop-optimizations -fsingle-precision-constant -fomit-frame-pointer -finline-functions -funswitch-loops \
-		   -fpredictive-commoning -fno-schedule-insns2 -fivopts -ftree-loop-distribution -fgraphite-identity \
-		   -floop-interchange -floop-strip-mine -floop-block -floop-parallelize-all -Wno-unused
+		   -ffast-math
+
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
