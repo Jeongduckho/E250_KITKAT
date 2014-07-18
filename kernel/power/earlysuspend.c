@@ -11,7 +11,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- *
  */
 
 #include <linux/earlysuspend.h>
@@ -55,7 +54,6 @@ enum {
 	SUSPEND_REQUESTED_AND_SUSPENDED = SUSPEND_REQUESTED | SUSPENDED,
 };
 static int state;
-
 #ifdef CONFIG_SPEEDUP_KEYRESUME
 	struct sched_param earlysuspend_s = { .sched_priority = 66 };
 	struct sched_param earlysuspend_v = { .sched_priority = 0 };
@@ -155,7 +153,8 @@ static void late_resume(struct work_struct *work)
 	struct early_suspend *pos;
 	unsigned long irqflags;
 	int abort = 0;
-
+	struct timer_list timer;
+	struct pm_wd_data data;
 #ifdef CONFIG_SPEEDUP_KEYRESUME
 	earlysuspend_old_prio = current->rt_priority;
 	earlysuspend_old_policy = current->policy;
@@ -167,8 +166,6 @@ static void late_resume(struct work_struct *work)
 	}
 #endif
 
-	struct timer_list timer;
-	struct pm_wd_data data;
 
 	pm_wd_add_timer(&timer, &data, 30);
 
@@ -200,7 +197,6 @@ static void late_resume(struct work_struct *work)
 		pr_info("late_resume: done\n");
 abort:
 	mutex_unlock(&early_suspend_lock);
-
 #ifdef CONFIG_SPEEDUP_KEYRESUME
 	if (!(unlikely(earlysuspend_old_policy == SCHED_FIFO) || unlikely(earlysuspend_old_policy == SCHED_RR))) {
 		earlysuspend_v.sched_priority = earlysuspend_old_prio;
