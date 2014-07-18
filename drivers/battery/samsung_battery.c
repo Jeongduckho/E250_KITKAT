@@ -1309,8 +1309,24 @@ static void battery_indicator_icon(struct battery_info *info)
 
 #if defined(CONFIG_MACH_KONA)
 		if (info->cable_type == POWER_SUPPLY_TYPE_USB) {
+		if(info->lpm_state == true)
+		{
+		    if(info->battery_soc == 100)
+			{
+				info->charge_virt_state =
+					POWER_SUPPLY_STATUS_FULL;
+			}
+			else
+			{
 			info->charge_virt_state =
+				POWER_SUPPLY_STATUS_CHARGING;
+			}
+		}
+		else
+		{
+		info->charge_virt_state =
 				POWER_SUPPLY_STATUS_DISCHARGING;
+		}
 		}
 #endif
 #if 0
@@ -1905,11 +1921,9 @@ skip_updating_status:
 	if ((info->lpm_state == true) &&
 		(info->cable_type == POWER_SUPPLY_TYPE_BATTERY)) {
 		pr_info("%s: lpm with battery, maybe power off\n", __func__);
-		wake_lock_timeout(&info->monitor_wake_lock,
-					msecs_to_jiffies(3000));
+		wake_lock_timeout(&info->monitor_wake_lock, 3 * HZ);
 	} else {
-		wake_lock_timeout(&info->monitor_wake_lock,
-					msecs_to_jiffies(300));
+		wake_lock_timeout(&info->monitor_wake_lock, HZ / 4);
 	}
 
 	mutex_unlock(&info->mon_lock);
