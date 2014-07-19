@@ -654,7 +654,8 @@ static void tcp_v4_send_reset(struct sock *sk, struct sk_buff *skb)
 	 * routing might fail in this case. using iif for oif to
 	 * make sure we can deliver it
 	 */
-	arg.bound_dev_if = sk ? sk->sk_bound_dev_if : inet_iif(skb);
+	if (sk)
+		arg.bound_dev_if = sk->sk_bound_dev_if;
 
 	net = dev_net(skb_dst(skb)->dev);
 	ip_send_reply(net->ipv4.tcp_sock, skb, ip_hdr(skb)->saddr,
