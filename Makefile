@@ -1,8 +1,8 @@
 VERSION = 3
 PATCHLEVEL = 0
-SUBLEVEL = 31
+SUBLEVEL = 101
 EXTRAVERSION =
-NAME = Sneaky Weasel
+NAME = Sodden Ben Lomond
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"
@@ -349,7 +349,7 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
 CFLAGS_MODULE   =
 AFLAGS_MODULE   =
-LDFLAGS_MODULE  =
+LDFLAGS_MODULE  = --strip-debug
 CFLAGS_KERNEL	=
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
@@ -375,9 +375,11 @@ KBUILD_CFLAGS   := -Wundef                                \
 		   -mfpu=neon                             \
 		   -funsafe-math-optimizations            \
 		   -ffast-math                            \
-		   -march=armv7-a \
-		   -mtune=cortex-a9 -mfpu=neon -munaligned-access \
-		   -ffast-math
+		   -mcpu=cortex-a9 			  \
+		   -mtune=cortex-a9 			  \
+		   -mfpu=neon                             \
+		   -march=armv7-a 			  \
+		   -munaligned-access 			  					  
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
@@ -578,9 +580,11 @@ endif
 
 ifdef CONFIG_CC_CHECK_WARNING_STRICTLY
 KBUILD_CFLAGS	+= -fdiagnostics-show-option -Werror \
-		   -Wno-unused
+		   -Wno-error=unused-function \
+		   -Wno-error=unused-variable \
+		   -Wno-error=unused-value \
+		   -Wno-error=unused-label
 endif
-
 ifdef CONFIG_CC_NOWARN
 KBUILD_CFLAGS	+= -w
 endif

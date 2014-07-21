@@ -1,6 +1,6 @@
 /*
  * Automatically generated C config: don't edit
- * Linux/arm 3.0.31 Kernel Configuration
+ * Linux/arm 3.0.101 Kernel Configuration
  */
 /* ld script to make ARM Linux kernel
  * taken from the i386 version by Russell King
@@ -333,24 +333,6 @@
 /* Maximum of 256MiB in one bank */
 /* Required by ION to allocate scatterlist(sglist) with nents > 256 */
 /*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-/*  Size definitions
- *  Copyright (C) ARM Limited 1998. All rights reserved.
- */
-/*
  * linux/include/asm-generic/sizes.h
  *
  * This program is free software; you can redistribute it and/or modify
@@ -419,7 +401,7 @@ SECTIONS
   _sinittext = .;
    *(.head.text)
    *(.init.text) *(.meminit.text)
-  
+   *(.exit.text) *(.memexit.text)
   _einittext = .;
  
   __arch_info_begin = .;
@@ -441,9 +423,9 @@ SECTIONS
   . = ALIGN(4); __initramfs_start = .; *(.init.ramfs) . = ALIGN(8); *(.init.ramfs.info)
   __init_begin = _stext;
   *(.init.data) *(.meminit.data) *(.init.rodata) . = ALIGN(8); __start_ftrace_events = .; *(_ftrace_events) __stop_ftrace_events = .; *(.meminit.rodata) . = ALIGN(32); __dtb_start = .; *(.dtb.init.rodata) __dtb_end = .;
- 
+  *(.exit.data) *(.memexit.data) *(.memexit.rodata)
  }
- . = ALIGN((1 << 12)); .data..percpu : AT(ADDR(.data..percpu) - 0) { __per_cpu_load = .; __per_cpu_start = .; *(.data..percpu..first) . = ALIGN((1 << 12)); *(.data..percpu..page_aligned) . = ALIGN((1 << 6)); *(.data..percpu..readmostly) . = ALIGN((1 << 6)); *(.data..percpu) *(.data..percpu..shared_aligned) __per_cpu_end = .; }
+ . = ALIGN((1 << 12)); .data..percpu : AT(ADDR(.data..percpu) - 0) { __per_cpu_load = .; __per_cpu_start = .; *(.data..percpu..first) . = ALIGN((1 << 12)); *(.data..percpu..page_aligned) . = ALIGN((1 << 5)); *(.data..percpu..readmostly) . = ALIGN((1 << 5)); *(.data..percpu) *(.data..percpu..shared_aligned) __per_cpu_end = .; }
  . = ALIGN((1 << 12));
  __init_end = .;
  /*
@@ -489,8 +471,8 @@ SECTIONS
 		 */
   . = ALIGN(8192); *(.data..init_task)
   . = ALIGN((1 << 12)); __nosave_begin = .; *(.data..nosave) . = ALIGN((1 << 12)); __nosave_end = .;
-  . = ALIGN((1 << 6)); *(.data..cacheline_aligned)
-  . = ALIGN((1 << 6)); *(.data..read_mostly) . = ALIGN((1 << 6));
+  . = ALIGN((1 << 5)); *(.data..cacheline_aligned)
+  . = ALIGN((1 << 5)); *(.data..read_mostly) . = ALIGN((1 << 5));
   /*
 		 * The exception fixup table (might need resorting at runtime)
 		 */

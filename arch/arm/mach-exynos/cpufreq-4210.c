@@ -404,6 +404,8 @@ int exynos4210_cpufreq_init(struct exynos_dvfs_info *info)
 	tmp = __raw_readl(EXYNOS4_CLKDIV_CPU);
 
 	for (i = L0; i <  CPUFREQ_LEVEL_END; i++) {
+	
+
 		tmp &= ~(EXYNOS4_CLKDIV_CPU0_CORE_MASK |
 			EXYNOS4_CLKDIV_CPU0_COREM0_MASK |
 			EXYNOS4_CLKDIV_CPU0_COREM1_MASK |

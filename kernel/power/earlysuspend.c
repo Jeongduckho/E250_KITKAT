@@ -54,6 +54,7 @@ enum {
 	SUSPEND_REQUESTED_AND_SUSPENDED = SUSPEND_REQUESTED | SUSPENDED,
 };
 static int state;
+
 #ifdef CONFIG_SPEEDUP_KEYRESUME
 	struct sched_param earlysuspend_s = { .sched_priority = 66 };
 	struct sched_param earlysuspend_v = { .sched_priority = 0 };
@@ -167,6 +168,7 @@ static void late_resume(struct work_struct *work)
 #endif
 
 
+
 	pm_wd_add_timer(&timer, &data, 30);
 
 	mutex_lock(&early_suspend_lock);
@@ -197,6 +199,7 @@ static void late_resume(struct work_struct *work)
 		pr_info("late_resume: done\n");
 abort:
 	mutex_unlock(&early_suspend_lock);
+
 #ifdef CONFIG_SPEEDUP_KEYRESUME
 	if (!(unlikely(earlysuspend_old_policy == SCHED_FIFO) || unlikely(earlysuspend_old_policy == SCHED_RR))) {
 		earlysuspend_v.sched_priority = earlysuspend_old_prio;

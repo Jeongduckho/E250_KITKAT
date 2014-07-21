@@ -1111,6 +1111,11 @@ config TOUCH_BOOST_SWITCH
 	default n
 	help
 		Say Y here to enable Touch Boost Switch
+config SLIDE2WAKE
+	bool "Support for Silde 2 Wake"
+	default n
+	help
+		Say Y here to enable Silde 2 Wake
 source "drivers/input/touchscreen/wacom/Kconfig"
 
 source "drivers/input/touchscreen/rmi4/Kconfig"

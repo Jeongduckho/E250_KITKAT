@@ -63,12 +63,13 @@ static void battery_error_control(struct battery_info *info);
 unsigned int lpcharge;
 static int battery_get_lpm_state(char *str)
 {
-	get_option(&str, &lpcharge);
+	if (strncmp(str, "charger", 7) == 0)
+		lpcharge = 1;
 	pr_info("%s: Low power charging mode: %d\n", __func__, lpcharge);
 
 	return lpcharge;
 }
-__setup("lpcharge=", battery_get_lpm_state);
+__setup("androidboot.mode=", battery_get_lpm_state);
 EXPORT_SYMBOL(lpcharge);
 
 #if defined(CONFIG_MACH_KONA)
@@ -1921,9 +1922,11 @@ skip_updating_status:
 	if ((info->lpm_state == true) &&
 		(info->cable_type == POWER_SUPPLY_TYPE_BATTERY)) {
 		pr_info("%s: lpm with battery, maybe power off\n", __func__);
-		wake_lock_timeout(&info->monitor_wake_lock, 3 * HZ);
+		wake_lock_timeout(&info->monitor_wake_lock,
+					msecs_to_jiffies(3000));
 	} else {
-		wake_lock_timeout(&info->monitor_wake_lock, HZ / 4);
+		wake_lock_timeout(&info->monitor_wake_lock,
+					msecs_to_jiffies(300));
 	}
 
 	mutex_unlock(&info->mon_lock);

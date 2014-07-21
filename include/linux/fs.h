@@ -1727,6 +1727,7 @@ static inline void mark_inode_dirty_sync(struct inode *inode)
 }
 
 /**
+ * set_nlink - directly set an inode's link count
  * @inode: inode
  * @nlink: new nlink (should be non-zero)
  *

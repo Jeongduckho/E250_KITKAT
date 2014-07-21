@@ -6,6 +6,13 @@
 #if defined(CONFIG_CPU_FREQ) && defined(CONFIG_ARCH_EXYNOS4)
 #define CONFIG_DVFS_LIMIT
 #endif
+
+/* Yank555.lu - Make current max limit available globally */
+#ifdef CONFIG_DVFS_LIMIT
+int get_cpufreq_level(unsigned int freq, unsigned int *level);
+extern int cpufreq_max_limit_val;
+extern int cpufreq_max_limit_coupled;
+#endif
 struct swsusp_info {
 	struct new_utsname	uts;
 	u32			version_code;
@@ -290,9 +297,4 @@ static inline void pm_wd_timeout(unsigned long data) { }
 static inline void pm_wd_add_timer(struct timer_list *timer,
 				struct pm_wd_data *data, int timeout) { }
 static inline void pm_wd_del_timer(struct timer_list *timer) { }
-#endif
-#ifdef CONFIG_DVFS_LIMIT
-int get_cpufreq_level(unsigned int freq, unsigned int *level);
-extern int cpufreq_max_limit_val;
-extern int cpufreq_max_limit_coupled;
 #endif

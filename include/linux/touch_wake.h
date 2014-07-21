@@ -10,9 +10,12 @@ void powerkey_released(void);
 void proximity_detected(void);
 void proximity_off(void);
 void touch_press(void);
+#ifdef CONFIG_SLIDE2WAKE
 int get_touchoff_delay(void);
+#endif
 bool device_is_suspended(void);
 void set_powerkeydev(struct input_dev * input_device);
+extern bool slide2wake;
 extern bool knockon;
 
 #endif

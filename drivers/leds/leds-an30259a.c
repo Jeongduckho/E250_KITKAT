@@ -599,9 +599,9 @@ static ssize_t show_an30259a_led_fade(struct device *dev,
                     struct device_attribute *attr, char *buf)
 {
 	switch(led_enable_fade) {
-		case 0:		return sprintf(buf, "%d - LED fading is disabled\n", led_enable_fade);
-		case 1:		return sprintf(buf, "%d - LED fading is enabled\n", led_enable_fade);
-		default:	return sprintf(buf, "%d - LED fading is in undefined status\n", led_enable_fade);
+		case 0:		return sprintf(buf, "%d", led_enable_fade);
+		case 1:		return sprintf(buf, "%d", led_enable_fade);
+		default:	return sprintf(buf, "%d", led_enable_fade);
 	}
 }
 
@@ -624,12 +624,12 @@ static ssize_t show_an30259a_led_intensity(struct device *dev,
                     struct device_attribute *attr, char *buf)
 {
 	switch(led_intensity) {
-		case  0:	return sprintf(buf, "%d - CM stock LED intensity\n", led_intensity);
-		case 40:	return sprintf(buf, "%d - Samsung stock LED intensity\n", led_intensity);
+		case  0:	return sprintf(buf, "%d", led_intensity);
+		case 40:	return sprintf(buf, "%d", led_intensity);
 		default:	if (led_intensity < 40) 
-					return sprintf(buf, "%d - LED intesity darker by %d steps\n", led_intensity, 40-led_intensity);
+					return sprintf(buf, "%d", led_intensity, 40-led_intensity);
 				else
-					return sprintf(buf, "%d - LED intesity brighter by %d steps\n", led_intensity, led_intensity-40);
+					return sprintf(buf, "%d", led_intensity, led_intensity-40);
 	}
 }
 
@@ -654,12 +654,12 @@ static ssize_t show_an30259a_led_speed(struct device *dev,
                     struct device_attribute *attr, char *buf)
 {
 	switch(led_speed) {
-		case 1:		return sprintf(buf, "%d - LED blinking/fading speed as requested\n", led_speed); break;
+		case 1:		return sprintf(buf, "%d", led_speed); break;
 		case 2:
 		case 3:
 		case 4:
-		case 5:		return sprintf(buf, "%d - LED blinking/fading speed is %dx faster\n", led_speed, led_speed);
-		default:	return sprintf(buf, "%d - LED blinking/fading speed is in undefined status\n", led_speed);
+		case 5:		return sprintf(buf, "%d", led_speed, led_speed);
+		default:	return sprintf(buf, "%d", led_speed);
 	}
 }
 

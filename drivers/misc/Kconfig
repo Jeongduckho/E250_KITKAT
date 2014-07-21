@@ -713,4 +713,9 @@ config TOUCH_WAKE
 	help
 		Say Y here to enable Touch Wake
 
+config SLIDE2WAKE
+	bool "Support for Silde 2 Wake"
+	default n
+	help
+		Say Y here to enable Silde 2 Wake
 endif # MISC_DEVICES

@@ -171,11 +171,13 @@ struct device *sec_touchscreen;
 static struct device *bus_dev;
 
 int touch_is_pressed;
-static unsigned int wake_start = -1;
-static unsigned int wake_start_y = -100;
-static unsigned int x_lo;
-static unsigned int x_hi;
-static unsigned int y_tolerance = 132;
+#ifdef CONFIG_SLIDE2WAKE
+	static unsigned int wake_start = -1;
+	static unsigned int wake_start_y = -100;
+	static unsigned int x_lo;
+	static unsigned int x_hi;
+	static unsigned int y_tolerance = 132;
+#endif
 static bool knockon_reset = false;
 #ifdef CONFIG_TOUCH_WAKE
 static bool mms_ts_suspended = false;
@@ -1054,7 +1056,7 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 				}
 			}
 #endif
-#ifdef CONFIG_TOUCH_WAKE
+#ifdef CONFIG_SLIDE2WAKE
                         // slide2wake trigger
                         if (wake_start == i && x > x_hi
                         &&         abs(wake_start_y - y) < y_tolerance
@@ -1067,7 +1069,7 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 #endif
 			continue;
 		}
-#ifdef CONFIG_TOUCH_WAKE
+#ifdef CONFIG_SLIDE2WAKE
                 // slide2wake gesture start
                 if (x < x_lo) {
                         printk(KERN_ERR "[TSP] slide2wake down at: %4d\n", x);
@@ -4474,9 +4476,11 @@ static int __devinit mms_ts_probe(struct i2c_client *client,
 	ret = tsp_register_fb(info);
 	if (ret)
 		pr_err("[TSP] Failed to register fb\n");
-x_lo = info->max_x / 10 * 1;  /* 10% display width */
-x_hi = info->max_x / 10 * 9;  /* 90% display width */
-y_tolerance = info->max_y / 10 * 3 / 2;
+#ifdef CONFIG_SLIDE2WAKE
+	x_lo = info->max_x / 10 * 1;  /* 10% display width */
+	x_hi = info->max_x / 10 * 9;  /* 90% display width */
+	y_tolerance = info->max_y / 10 * 3 / 2;
+#endif
 #endif
 
 	sec_touchscreen = device_create(sec_class,

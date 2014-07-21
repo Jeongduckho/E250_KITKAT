@@ -1113,6 +1113,7 @@ static unsigned short tune_hijack[] = {
         END_SEQ, 0x0000
 };
 #endif
+
 struct mdnie_tuning_info tuning_table[CABC_MAX][MODE_MAX][SCENARIO_MAX] = {
 	{
 		{
@@ -1163,6 +1164,18 @@ struct mdnie_tuning_info tuning_table[CABC_MAX][MODE_MAX][SCENARIO_MAX] = {
 			{"movie_browser",	tune_movie_browser},
 			{"movie_ebook",		tune_movie_ebook},
 			{"email",		tune_movie_ui}
+		}, {
+			{"hijack_ui",		tune_hijack},
+			{"hijack_video",		tune_hijack},
+			{"hijack_video",		tune_hijack},
+			{"hijack_video",		tune_hijack},
+			{"hijack_camera",		tune_hijack},
+			{"hijack_ui",		tune_hijack},
+			{"hijack_gallery",	tune_hijack},
+			{"hijack_vt",		tune_hijack},
+			{"hijack_browser",	tune_hijack},
+			{"hijack_ebook",		tune_hijack},
+			{"email",		tune_hijack}
 		}, {
 			{"auto_ui",		tune_auto_ui},
 			{"auto_video",		tune_auto_video},

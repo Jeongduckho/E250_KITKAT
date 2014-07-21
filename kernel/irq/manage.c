@@ -538,7 +538,7 @@ int can_request_irq(unsigned int irq, unsigned long irqflags)
 	if (irq_settings_can_request(desc)) {
 		if (!desc->action ||
 		    irqflags & desc->action->flags & IRQF_SHARED)
-				canrequest =1;
+			canrequest = 1;
 	}
 	irq_put_desc_unlock(desc, flags);
 	return canrequest;
@@ -718,13 +718,13 @@ irq_thread_check_affinity(struct irq_desc *desc, struct irqaction *action)
 	 * mask pointer. For CPU_MASK_OFFSTACK=n this is optimized out.
 	 */
 	if (desc->irq_data.affinity)
-	cpumask_copy(mask, desc->irq_data.affinity);
+		cpumask_copy(mask, desc->irq_data.affinity);
 	else
 		valid = false;
 	raw_spin_unlock_irq(&desc->lock);
 
 	if (valid)
-	set_cpus_allowed_ptr(current, mask);
+		set_cpus_allowed_ptr(current, mask);
 	free_cpumask_var(mask);
 }
 #else
@@ -1328,7 +1328,6 @@ EXPORT_SYMBOL(free_irq);
  *	Flags:
  *
  *	IRQF_SHARED		Interrupt is shared
- *	IRQF_SAMPLE_RANDOM	The interrupt can be used for entropy
  *	IRQF_TRIGGER_*		Specify active edge(s) or level
  *
  */
